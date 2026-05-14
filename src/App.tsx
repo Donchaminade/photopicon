@@ -3,6 +3,97 @@ import { Camera, Image as ImageIcon, Smartphone, Zap, CheckCircle2, ChevronRight
 import { useState, useEffect, useRef, FormEvent } from "react";
 
 // Components
+const SplashScreen = ({ onComplete }: { onComplete: () => void }) => {
+  return (
+    <motion.div 
+      initial={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[999] bg-slate-950 flex items-center justify-center overflow-hidden"
+    >
+      {/* Background flash effect */}
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: [0, 0.5, 0] }}
+        transition={{ delay: 1.2, duration: 0.1 }}
+        className="absolute inset-0 bg-blue-500/20 shadow-[0_0_100px_rgba(59,130,246,0.5)]"
+      />
+
+      <div className="relative w-full max-w-lg h-64 flex items-center justify-center">
+        {/* Bolt 1 */}
+        <motion.div
+          initial={{ x: -400, y: -400, opacity: 0, scale: 0.5, rotate: -45 }}
+          animate={{ x: 0, y: 0, opacity: 1, scale: [0.5, 1.5, 1], rotate: -45 }}
+          transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
+          className="absolute text-blue-500 drop-shadow-[0_0_30px_rgba(59,130,246,0.8)]"
+        >
+          <Zap className="w-32 h-32 fill-blue-500" strokeWidth={1} />
+        </motion.div>
+
+        {/* Bolt 2 */}
+        <motion.div
+          initial={{ x: 400, y: -400, opacity: 0, scale: 0.5, rotate: 45 }}
+          animate={{ x: 0, y: 0, opacity: 1, scale: [0.5, 1.5, 1], rotate: 45 }}
+          transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
+          className="absolute text-orange-500 drop-shadow-[0_0_30px_rgba(249,115,22,0.8)]"
+        >
+          <Zap className="w-32 h-32 fill-orange-500" strokeWidth={1} />
+        </motion.div>
+
+        {/* Central Logo Revelation */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.5, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ delay: 1.2, duration: 0.6, type: "spring" }}
+          className="flex flex-col items-center gap-6 z-10"
+        >
+          <motion.div 
+            animate={{ 
+              boxShadow: ["0 0 0px rgba(59,130,246,0)", "0 0 60px rgba(59,130,246,0.6)", "0 0 20px rgba(59,130,246,0.2)"]
+            }}
+            transition={{ repeat: Infinity, duration: 2 }}
+            className="w-24 h-24 bg-blue-600 rounded-[2.5rem] flex items-center justify-center shadow-2xl relative overflow-hidden group"
+          >
+            <Camera className="w-12 h-12 text-white relative z-10" />
+            <motion.div 
+              animate={{ rotate: 360 }}
+              transition={{ repeat: Infinity, duration: 8, ease: "linear" }}
+              className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/30 to-transparent"
+            />
+          </motion.div>
+          <div className="overflow-hidden">
+            <motion.h1 
+              initial={{ y: 60 }}
+              animate={{ y: 0 }}
+              transition={{ delay: 1.4, duration: 0.6, ease: "easeOut" }}
+              className="text-5xl font-black text-white tracking-tighter"
+            >
+              PICON
+            </motion.h1>
+          </div>
+        </motion.div>
+
+        {/* Shockwave */}
+        <motion.div 
+          initial={{ scale: 0, opacity: 0 }}
+          animate={{ scale: 6, opacity: [0, 1, 0] }}
+          transition={{ delay: 1.2, duration: 1 }}
+          className="absolute w-32 h-32 border-4 border-white rounded-full z-0"
+        />
+      </div>
+
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 0.5 }}
+        transition={{ delay: 2.2 }}
+        className="absolute bottom-12 flex items-center gap-2 text-slate-500 font-black uppercase tracking-[0.4em] text-[10px]"
+      >
+        <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
+        Labo Photo Togo
+      </motion.div>
+    </motion.div>
+  );
+};
+
 const Navbar = ({ darkMode, toggleDarkMode }: { darkMode: boolean, toggleDarkMode: () => void }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -783,6 +874,15 @@ const Footer = () => {
 };
 
 export default function App() {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 3500); // Cinematic duration
+    return () => clearTimeout(timer);
+  }, []);
+
   const [darkMode, setDarkMode] = useState(() => {
     if (typeof window !== "undefined") {
       return localStorage.getItem("theme") === "dark" || 
@@ -815,6 +915,10 @@ export default function App() {
 
   return (
     <div className="min-h-screen font-sans selection:bg-slate-900 selection:text-slate-100 dark:selection:bg-slate-100 dark:selection:text-slate-900 scroll-smooth bg-white dark:bg-slate-950 transition-colors duration-300">
+      <AnimatePresence>
+        {loading && <SplashScreen key="splash" onComplete={() => setLoading(false)} />}
+      </AnimatePresence>
+
       <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
       
       <AnimatePresence>
