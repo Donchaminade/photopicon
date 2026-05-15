@@ -3,87 +3,87 @@ import { Camera, Image as ImageIcon, Smartphone, Zap, CheckCircle2, ChevronRight
 import { useState, useEffect, useRef, FormEvent } from "react";
 
 // Components
-const SplashScreen = ({ onComplete }: { onComplete: () => void }) => {
+const SplashScreen = ({ onComplete }: { onComplete: () => void, key?: string }) => {
   return (
     <motion.div
       initial={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[999] bg-slate-950 flex items-center justify-center overflow-hidden"
+      exit={{ opacity: 0, transition: { duration: 0.8, ease: "easeInOut" } }}
+      className="fixed inset-0 z-[999] flex items-center justify-center overflow-hidden bg-slate-950"
     >
-      {/* Background flash effect */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: [0, 0.5, 0] }}
-        transition={{ delay: 1.2, duration: 0.1 }}
-        className="absolute inset-0 bg-blue-500/20 shadow-[0_0_100px_rgba(59,130,246,0.5)]"
+      {/* Premium Ambient Background */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(30,58,138,0.15)_0%,rgba(2,6,23,1)_100%)]" />
+      
+      {/* Animated glowing orbs in background */}
+      <motion.div 
+        animate={{ 
+          scale: [1, 1.2, 1],
+          opacity: [0.3, 0.5, 0.3],
+        }}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-blue-600/20 blur-[100px] rounded-full"
+      />
+      <motion.div 
+        animate={{ 
+          scale: [1, 1.5, 1],
+          opacity: [0.2, 0.4, 0.2],
+        }}
+        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-orange-500/10 blur-[80px] rounded-full"
       />
 
-      <div className="relative w-full max-w-lg h-64 flex items-center justify-center">
-        {/* Bolt 1 */}
+      <div className="relative z-10 flex flex-col items-center gap-8">
+        {/* Logo Reveal */}
         <motion.div
-          initial={{ x: -400, y: -400, opacity: 0, scale: 0.5, rotate: -45 }}
-          animate={{ x: 0, y: 0, opacity: 1, scale: [0.5, 1.5, 1], rotate: -45 }}
-          transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
-          className="absolute text-blue-500 drop-shadow-[0_0_30px_rgba(59,130,246,0.8)]"
+          initial={{ opacity: 0, scale: 0.8, filter: "blur(20px)" }}
+          animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+          transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+          className="relative w-48 h-48 flex items-center justify-center"
         >
-          <Zap className="w-32 h-32 fill-blue-500" strokeWidth={1} />
+          {/* Rotating dashed ring */}
+          <motion.div 
+            animate={{ rotate: 360 }}
+            transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+            className="absolute inset-0 rounded-full border-2 border-dashed border-blue-500/30"
+          />
+          {/* Inner solid glowing ring */}
+          <motion.div 
+            animate={{ scale: [1, 1.05, 1] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute inset-4 rounded-full border border-blue-400/20 shadow-[0_0_30px_rgba(59,130,246,0.2)]"
+          />
+          
+          <img src="/logo.png" alt="PICON" className="w-24 h-24 object-contain relative z-10 drop-shadow-2xl" />
         </motion.div>
 
-        {/* Bolt 2 */}
-        <motion.div
-          initial={{ x: 400, y: -400, opacity: 0, scale: 0.5, rotate: 45 }}
-          animate={{ x: 0, y: 0, opacity: 1, scale: [0.5, 1.5, 1], rotate: 45 }}
-          transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
-          className="absolute text-orange-500 drop-shadow-[0_0_30px_rgba(249,115,22,0.8)]"
-        >
-          <Zap className="w-32 h-32 fill-orange-500" strokeWidth={1} />
-        </motion.div>
-
-        {/* Central Logo Revelation */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.5, y: 20 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ delay: 1.2, duration: 0.6, type: "spring" }}
-          className="flex flex-col items-center gap-6 z-10"
-        >
-          <motion.div
-            animate={{
-              boxShadow: ["0 0 0px rgba(59,130,246,0)", "0 0 60px rgba(59,130,246,0.6)", "0 0 20px rgba(59,130,246,0.2)"]
-            }}
-            transition={{ repeat: Infinity, duration: 2 }}
-            className="w-32 h-32 flex items-center justify-center relative overflow-hidden"
+        {/* Text Reveal */}
+        <div className="flex flex-col items-center overflow-hidden">
+          <motion.h1
+            initial={{ y: "100%", opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.4, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            className="text-5xl md:text-6xl font-black text-white tracking-tighter"
           >
-            <img src="/logo.png" alt="PICON" className="w-full h-full object-contain relative z-10" />
-          </motion.div>
-          <div className="overflow-hidden">
-            <motion.h1
-              initial={{ y: 60 }}
-              animate={{ y: 0 }}
-              transition={{ delay: 1.4, duration: 0.6, ease: "easeOut" }}
-              className="text-5xl font-black text-white tracking-tighter"
-            >
-              PICON
-            </motion.h1>
-          </div>
-        </motion.div>
-
-        {/* Shockwave */}
-        <motion.div
-          initial={{ scale: 0, opacity: 0 }}
-          animate={{ scale: 6, opacity: [0, 1, 0] }}
-          transition={{ delay: 1.2, duration: 1 }}
-          className="absolute w-32 h-32 border-4 border-white rounded-full z-0"
-        />
+            PICON
+          </motion.h1>
+          <motion.div
+            initial={{ width: 0 }}
+            animate={{ width: "100%" }}
+            transition={{ delay: 0.8, duration: 0.8, ease: "easeInOut" }}
+            className="h-1 bg-gradient-to-r from-transparent via-orange-500 to-transparent mt-4"
+          />
+        </div>
       </div>
 
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 0.5 }}
-        transition={{ delay: 2.2 }}
-        className="absolute bottom-12 flex items-center gap-2 text-slate-500 font-black uppercase tracking-[0.4em] text-[10px]"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1.5, duration: 0.8 }}
+        className="absolute bottom-12 flex flex-col items-center gap-3 text-white/50"
       >
-        <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
-        Labo Photo Togo
+        <div className="flex items-center gap-3 font-bold uppercase tracking-[0.3em] text-xs">
+          <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse shadow-[0_0_10px_rgba(59,130,246,0.8)]" />
+          Laboratoire Photo Premium
+        </div>
       </motion.div>
     </motion.div>
   );
