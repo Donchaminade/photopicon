@@ -244,7 +244,7 @@ const Hero = () => {
                 </button>
               </div>
             </div>
-            <div className="flex -space-x-3 items-center ml-2">
+            {/* <div className="flex -space-x-3 items-center ml-2">
               {[1, 2, 3, 4].map(i => (
                 <motion.div
                   key={i}
@@ -258,7 +258,7 @@ const Hero = () => {
                 </motion.div>
               ))}
               <span className="ml-6 text-sm font-bold text-blue-900/60 dark:text-blue-400 tracking-tight">+12k utilisateurs ravis</span>
-            </div>
+            </div> */}
           </div>
         </motion.div>
 
